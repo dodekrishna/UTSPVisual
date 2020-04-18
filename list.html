@@ -1,0 +1,58 @@
+<html>
+
+<head>
+</head>
+
+<body>
+    <h4>Daftar Pesanan</h4>
+    <div id="list"></div>
+</body>
+
+<script>
+    const electron = require("electron");
+    const {
+        ipcRenderer
+    } = electron;
+
+    ipcRenderer.send("appointment:request:list");
+
+    ipcRenderer.on("appointment:response:list", (event, appointments) => {
+        const listDiv = document.getElementById("list");
+        appointments.forEach(appointment => {
+            const appointmentDiv = document.createElement("div");
+
+            const nameParagraph = document.createElement("p");
+            nameParagraph.innerHTML = `Nama: ${appointment.name}`;
+
+            const numberParagraph = document.createElement("p");
+            numberParagraph.innerHTML = `Nomor Telepon: ${appointment.number}`;
+
+            const dateParagraph = document.createElement("p");
+            dateParagraph.innerHTML = `Sampai Tanggal: ${appointment.date}`;
+
+            const hourParagraph = document.createElement("p");
+            hourParagraph.innerHTML = `Sampai Jam: ${appointment.hour}`;
+
+            const symptomsParagraph = document.createElement("p");
+            symptomsParagraph.innerHTML = `Keterangan: ${appointment.symptoms}`;
+
+            const doneParagraph = document.createElement("p");
+            doneParagraph.innerHTML = `Done: ${appointment.done ? "Yes" : "No"}`;
+
+            const hr = document.createElement("hr");
+
+            appointmentDiv.appendChild(nameParagraph);
+            appointmentDiv.appendChild(numberParagraph);
+            appointmentDiv.appendChild(dateParagraph);
+            appointmentDiv.appendChild(hourParagraph);
+            appointmentDiv.appendChild(symptomsParagraph);
+            appointmentDiv.appendChild(doneParagraph);
+            appointmentDiv.appendChild(hr);
+
+            listDiv.append(appointmentDiv);
+
+        });
+    });
+</script>
+
+</html>
